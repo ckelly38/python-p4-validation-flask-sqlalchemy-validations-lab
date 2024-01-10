@@ -46,7 +46,16 @@ class Author(db.Model):
     #author names are unique and all authors have names
     @validates("name")
     def nameisvalid(self, key, val):
-        return mv.stringIsNotEmpty(key, val, "author", "name");
+        retval = mv.stringIsNotEmpty(key, val, "author", "name");
+        #print(f"retval = {retval}");
+        #print(f"val = {val}");
+        #print(Author.query.all());
+        anames = [a.name for a in Author.query.all()];
+        for nm in anames:
+        #    print(f"nm = {nm}");
+        #    print(f"val = {val}");
+            if (nm == val): raise ValueError("duplicate name found!");
+        return retval;
         #if (type(val) == str):
         #    if (len(val) < 1): raise ValueError("all authors must have a name!");
         #    else: return val;
